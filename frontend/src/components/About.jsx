@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Container, Table } from "react-bootstrap";
 
 const About = () => {
+    // Tüm yazarları diziye ekliyoruz
     const authors = [
         "Ahmet Yiğit",
         "Muhammet Burak Özyurt",
@@ -17,7 +18,7 @@ const About = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#f8f9fa', // Açık gri arka plan (siyahlığı kırmak için)
+            backgroundColor: '#f8f9fa', // Açık gri arka plan
             padding: '20px'
         }}>
             <Card style={{
@@ -33,7 +34,7 @@ const About = () => {
                     fontSize: '1.2rem',
                     textAlign: 'center'
                 }}>
-                    PROJE EKİBİ VE HAKKINDA
+                    Project Team
                 </Card.Header>
                 <Card.Body>
                     <Container fluid>
@@ -46,20 +47,11 @@ const About = () => {
                                         backgroundColor: '#f1f1f1',
                                         verticalAlign: 'middle'
                                     }}>
-                                        Yazarlar (Authors):
+                                        Authors:
                                     </td>
-                                    <td>
-                                        <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-                                            {authors.map((author, index) => (
-                                                <li key={index} style={{
-                                                    padding: '5px 0',
-                                                    borderBottom: index !== authors.length - 1 ? '1px solid #eee' : 'none',
-                                                    color: '#333'
-                                                }}>
-                                                    {author}
-                                                </li>
-                                            ))}
-                                        </ul>
+                                    {/* .join metodu ile dizideki elemanları aralarına ' - ' koyarak metin haline getiriyoruz */}
+                                    <td style={{ color: '#333', textAlign: 'left', verticalAlign: 'middle' }}>
+                                        {authors.join(" - ")}
                                     </td>
                                 </tr>
                                 <tr>
@@ -68,9 +60,9 @@ const About = () => {
                                         backgroundColor: '#f1f1f1',
                                         verticalAlign: 'middle'
                                     }}>
-                                        Tarih (Date):
+                                        Date:
                                     </td>
-                                    <td style={{ color: '#333' }}>
+                                    <td style={{ color: '#333', textAlign: 'left' }}>
                                         {new Date().toLocaleDateString('tr-TR')}
                                     </td>
                                 </tr>
@@ -79,7 +71,7 @@ const About = () => {
                     </Container>
                 </Card.Body>
                 <Card.Footer style={{ textAlign: 'center', fontSize: '0.9rem', color: '#666' }}>
-                    Banking Management System v1.0
+                    Banking Management System
                 </Card.Footer>
             </Card>
         </div>
