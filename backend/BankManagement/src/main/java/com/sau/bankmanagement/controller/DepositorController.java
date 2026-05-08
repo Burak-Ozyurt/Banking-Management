@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/depositors")
+@RequestMapping("/depositor")
 @CrossOrigin(origins = "http://localhost:5173")
 public class DepositorController {
 
@@ -33,7 +33,7 @@ public class DepositorController {
         this.reportService = reportService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Depositor> getAll() {
         return depositorRepository.findAll();
     }
@@ -43,7 +43,7 @@ public class DepositorController {
         return depositorRepository.findByCustomerId(customerId);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public Depositor assign(@RequestBody DepositorDTO dto) {
         Customer customer = customerRepository.findById(dto.getCustomerId())
                 .orElseThrow(() -> new RuntimeException("İlişkilendirilecek müşteri bulunamadı!"));
@@ -59,7 +59,7 @@ public class DepositorController {
         return depositorRepository.save(depositor);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         if(!depositorRepository.existsById(id)) {
             throw new RuntimeException("Silinecek ilişki kaydı bulunamadı!");

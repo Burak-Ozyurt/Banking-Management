@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/customer")
 @CrossOrigin(origins = "http://localhost:5173")
 public class CustomerController {
 
@@ -26,7 +26,7 @@ public class CustomerController {
         this.reportService = reportService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Customer> getAll() {
         return repository.findAll();
     }
@@ -37,7 +37,7 @@ public class CustomerController {
                 .orElseThrow(() -> new RuntimeException("Müşteri bulunamadı! ID: " + id));
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public Customer save(@ModelAttribute Customer customer,
                          @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         if (image != null && !image.isEmpty()) {
@@ -47,7 +47,7 @@ public class CustomerController {
         return repository.save(customer);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Customer update(@PathVariable int id, @ModelAttribute Customer details,
                            @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
         Customer customer = repository.findById(id)
@@ -64,7 +64,7 @@ public class CustomerController {
         return repository.save(customer);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         if(!repository.existsById(id)) throw new RuntimeException("Silinecek müşteri bulunamadı!");
         repository.deleteById(id);

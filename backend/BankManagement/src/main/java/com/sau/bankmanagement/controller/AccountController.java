@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/account")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AccountController {
 
@@ -21,7 +21,7 @@ public class AccountController {
         this.reportService = reportService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Account> getAll() {
         return accountRepository.findAll();
     }
@@ -32,12 +32,12 @@ public class AccountController {
                 .orElseThrow(() -> new RuntimeException("Hesap bulunamadı! ID: " + id));
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public Account save(@RequestBody Account account) {
         return accountRepository.save(account);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Account update(@PathVariable int id, @RequestBody Account details) {
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hesap bulunamadı! ID: " + id));
@@ -47,7 +47,7 @@ public class AccountController {
         return accountRepository.save(account);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         accountRepository.deleteById(id);
     }
