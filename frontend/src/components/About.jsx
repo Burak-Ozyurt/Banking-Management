@@ -1,3 +1,6 @@
+import React from "react";
+import { Card, Container, Table } from "react-bootstrap";
+
 const About = () => {
     const authors = [
         "Ahmet Yiğit",
@@ -8,29 +11,77 @@ const About = () => {
     ];
 
     return (
-        <div style={{ padding: '20px' }}>
-            <h2>Hakkında</h2>
-            <table border="1" cellPadding="10" style={{ margin: '0 auto', textAlign: 'left', borderCollapse: 'collapse' }}>
-                <tbody>
-                <tr>
-                    <td style={{ fontWeight: 'bold', verticalAlign: 'top' }}>Authors:</td>
-                    <td>
-                        {/* İsimleri alt alta sıralı bir şekilde listeliyoruz */}
-                        <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-                            {authors.map((author, index) => (
-                                <li key={index} style={{ marginBottom: '5px' }}>
-                                    {author}
-                                </li>
-                            ))}
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td style={{ fontWeight: 'bold' }}>Date:</td>
-                    <td>{new Date().toLocaleDateString('tr-TR')}</td>
-                </tr>
-                </tbody>
-            </table>
+        // Sayfayı ekrana tam sığdırmak ve ortalamak için wrapper div
+        <div style={{
+            minHeight: '80vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#f8f9fa', // Açık gri arka plan (siyahlığı kırmak için)
+            padding: '20px'
+        }}>
+            <Card style={{
+                width: '100%',
+                maxWidth: '800px',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                border: 'none'
+            }}>
+                <Card.Header style={{
+                    backgroundColor: '#006699',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '1.2rem',
+                    textAlign: 'center'
+                }}>
+                    PROJE EKİBİ VE HAKKINDA
+                </Card.Header>
+                <Card.Body>
+                    <Container fluid>
+                        <Table striped bordered hover responsive style={{ marginBottom: 0 }}>
+                            <tbody>
+                                <tr>
+                                    <td style={{
+                                        fontWeight: 'bold',
+                                        width: '30%',
+                                        backgroundColor: '#f1f1f1',
+                                        verticalAlign: 'middle'
+                                    }}>
+                                        Yazarlar (Authors):
+                                    </td>
+                                    <td>
+                                        <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+                                            {authors.map((author, index) => (
+                                                <li key={index} style={{
+                                                    padding: '5px 0',
+                                                    borderBottom: index !== authors.length - 1 ? '1px solid #eee' : 'none',
+                                                    color: '#333'
+                                                }}>
+                                                    {author}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style={{
+                                        fontWeight: 'bold',
+                                        backgroundColor: '#f1f1f1',
+                                        verticalAlign: 'middle'
+                                    }}>
+                                        Tarih (Date):
+                                    </td>
+                                    <td style={{ color: '#333' }}>
+                                        {new Date().toLocaleDateString('tr-TR')}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </Table>
+                    </Container>
+                </Card.Body>
+                <Card.Footer style={{ textAlign: 'center', fontSize: '0.9rem', color: '#666' }}>
+                    Banking Management System v1.0
+                </Card.Footer>
+            </Card>
         </div>
     );
 }

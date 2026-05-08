@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import Home from './components/Home';
-import Customer from './components/CustomerList';
-import Car from './components/AccountList';
-import Rental from './components/DepositorList';
+import Customer from './components/Customer';
+import Account from './components/Account';
+import Depositor from './components/Depositor';
 import About from './components/About';
 import Pdf from './components/Pdf';
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [page, setPage] = useState('home');
@@ -15,20 +16,24 @@ function App() {
   }
   return (
     <div>
-      <ul>
-        <li><a style={{color: 'white'}} onClick={() => handle('home')}>Home</a></li>
-        <li><a style={{color: 'wheat'}} onClick={() => handle('account')}>Accounts</a></li>
-        <li><a style={{color: 'wheat'}} onClick={() => handle('customer')}>Customers</a></li>
-        <li><a style={{color: 'wheat'}} onClick={() => handle('depositor')}>Depositors</a></li>
-        <li><a style={{color: 'wheat'}} onClick={() => handle('pdf')}>Pdf</a></li>
-        <li><a style={{color: 'wheat'}} onClick={() => handle('about')}>About</a></li>
+
+      <ul style={{ display: 'flex', gap: '15px', listStyleType: 'none', background: '#006699', padding: '15px', margin: 0 }}>
+        <li><a style={{color: 'white', cursor: 'pointer', fontWeight: 'bold'}} onClick={() => handle('home')}>Ana Sayfa</a></li>
+        <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('account')}>Hesaplar</a></li>
+        <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('customer')}>Müşteriler</a></li>
+        <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('depositor')}>İlişkiler</a></li>
+        <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('pdf')}>Raporlar (PDF)</a></li>
+        <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('about')}>Hakkında</a></li>
       </ul>
-      {page === 'home' && <Home/>}
-      {page === 'account' && <Account/>}
-      {page === 'customer' && <Customer/>}
-      {page === 'depositor' && <Depositor/>}
-      {page === 'pdf' && <Pdf/>}
-      {page === 'about' && <About/>}
+
+      <div style={{ marginTop: '20px' }}>
+        {page === 'home' && <Home/>}
+        {page === 'account' && <Account/>}
+        {page === 'customer' && <Customer/>}
+        {page === 'depositor' && <Depositor/>}
+        {page === 'pdf' && <Pdf/>}
+        {page === 'about' && <About/>}
+      </div>
     </div>
   )
 }
