@@ -50,7 +50,7 @@ const Depositor = () => {
         <div>
             {/* Add a modal for insert */}
             <Modal show={modalAdd} onHide={() => setModalAdd(false)}>
-                <Modal.Header closeButton>ADD DEPOSITOR (RELATION)</Modal.Header>
+                <Modal.Header closeButton>ADD DEPOSITOR</Modal.Header>
                 <div>
                     <Card>
                         <Card.Body>
