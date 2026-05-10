@@ -22,7 +22,7 @@ function App() {
         <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('account')}>Accounts</a></li>
         <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('customer')}>Customers</a></li>
         <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('depositor')}>Depositors</a></li>
-        <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('pdf')}>Reports</a></li>
+        <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('pdf')}>PDF</a></li>
         <li><a style={{color: 'wheat', cursor: 'pointer'}} onClick={() => handle('about')}>About</a></li>
       </ul>
 

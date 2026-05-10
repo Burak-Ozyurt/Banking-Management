@@ -11,6 +11,9 @@ const Customer = () => {
     const [modalUpdate, setModalUpdate] = useState(false);
     const {handleSubmit: handleUpdate} = useForm();
 
+    // Güncelleme işlemi için resmi tutacağımız state
+    const [updateImage, setUpdateImage] = useState(null);
+
     const fetchCustomers = async (url) => {
         await axios.get(url)
             .then((res) => setCustomers(res.data))
@@ -22,16 +25,25 @@ const Customer = () => {
     }, []);
 
     const addCustomer = async (data) => {
-        // Not: Hocanın şablonunda doğrudan JSON gönderiliyor. Eğer backend'de resim (Multipart)
-        // beklentisi varsa form verilerini FormData'ya çevirmen gerekebilir.
-        // Şablona sadık kalındığı için direkt data yollanıyor.
-        await axios.post("http://localhost:8080/customer/add", data, {
-             headers: { 'Content-Type': 'multipart/form-data' } // Backend @ModelAttribute bekliyorsa bu satır eklendi
+        // Form verilerini FormData formatına çeviriyoruz
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("city", data.city);
+        formData.append("address", data.address);
+
+        // Eğer bir resim seçilmişse onu da ekliyoruz
+        if (data.image && data.image[0]) {
+            formData.append("image", data.image[0]);
+        }
+
+        await axios.post("http://localhost:8080/customer/add", formData, {
+             headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(() => {
                 resetField("name");
                 resetField("city");
                 resetField("address");
+                resetField("image"); // Resim alanını da sıfırlıyoruz
                 setModalAdd(false);
                 fetchCustomers("http://localhost:8080/customer/all");
             })
@@ -51,11 +63,24 @@ const Customer = () => {
         await axios.get("http://localhost:8080/customer/" + cid)
             .then((res) => setCustomerObj(res.data))
             .catch((err) => console.log(err));
+        setUpdateImage(null); // Modalı açarken önceki resim seçimini temizle
         setModalUpdate(true);
     };
 
     const onUpdateSet = async () => {
-        await axios.put("http://localhost:8080/customer/update/" + customerObj.id, customerObj, {
+        // Güncelleme verilerini de FormData formatına çeviriyoruz
+        const formData = new FormData();
+        formData.append("id", customerObj.id);
+        formData.append("name", customerObj.name);
+        formData.append("city", customerObj.city);
+        formData.append("address", customerObj.address);
+
+        // Yeni bir resim seçilmişse ekliyoruz
+        if (updateImage) {
+            formData.append("image", updateImage);
+        }
+
+        await axios.put("http://localhost:8080/customer/update/" + customerObj.id, formData, {
              headers: { 'Content-Type': 'multipart/form-data' }
         })
             .then(() => fetchCustomers("http://localhost:8080/customer/all"))
@@ -87,6 +112,13 @@ const Customer = () => {
                                                   placeholder='Address' {...register("address", {required: true})} />
                                     {errors.address && <p style={{color: 'red'}}>Address is required</p>}
                                 </Form.Group>
+
+                                {/* Resim Yükleme Alanı (Ekleme Modalı) */}
+                                <Form.Group className="mb-3" controlId="image">
+                                    <Form.Label>Profile Image</Form.Label>
+                                    <Form.Control type='file' accept="image/*" {...register("image")} />
+                                </Form.Group>
+
                                 <Button variant="primary" type="submit" style={{float: "right"}}>Add</Button>
                             </Form>
                         </Card.Body>
@@ -107,23 +139,31 @@ const Customer = () => {
                                     <Form.Control type="text" value={customerObj.id} disabled/>
                                 </Form.Group>
 
-                                <Form.Group className="mb-3" controlId="name">
+                                <Form.Group className="mb-3" controlId="updateName">
                                     <Form.Control type="text" placeholder="Name" value={customerObj.name}
                                                   onChange={(e) =>
                                                       setCustomerObj({...customerObj, name: e.target.value})}/>
                                 </Form.Group>
 
-                                <Form.Group className="mb-3" controlId="city">
+                                <Form.Group className="mb-3" controlId="updateCity">
                                     <Form.Control type="text" placeholder="City" value={customerObj.city}
                                                   onChange={(e) =>
                                                       setCustomerObj({...customerObj, city: e.target.value})}/>
                                 </Form.Group>
 
-                                <Form.Group className="mb-3" controlId="address">
+                                <Form.Group className="mb-3" controlId="updateAddress">
                                     <Form.Control type="text" placeholder="Address" value={customerObj.address}
                                                   onChange={(e) =>
                                                       setCustomerObj({...customerObj, address: e.target.value})}/>
                                 </Form.Group>
+
+                                {/* Resim Yükleme Alanı (Güncelleme Modalı) */}
+                                <Form.Group className="mb-3" controlId="updateImage">
+                                    <Form.Label>Profile Image</Form.Label>
+                                    <Form.Control type="file" accept="image/*"
+                                                  onChange={(e) => setUpdateImage(e.target.files[0])}/>
+                                </Form.Group>
+
                                 <Button variant="primary" type="submit" style={{float: "right"}}>Update</Button>
                             </Form>
                         </Card.Body>
@@ -146,6 +186,7 @@ const Customer = () => {
                             <thead>
                             <tr>
                                 <th scope="col">ID</th>
+                                <th scope="col">Image</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">City</th>
                                 <th scope="col">Address</th>
@@ -156,6 +197,18 @@ const Customer = () => {
                             {customers?.map((cust) => (
                                 <tr key={cust.id}>
                                     <td>{cust.id}</td>
+                                    {/* Müşteri Resmi Gösterim Alanı */}
+                                    <td>
+                                        {cust.profileImage ? (
+                                            <img
+                                                src={`http://localhost:8080/uploads/${cust.profileImage}`}
+                                                alt="Profile"
+                                                style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }}
+                                            />
+                                        ) : (
+                                            "No Image"
+                                        )}
+                                    </td>
                                     <td style={{textAlign: "left"}}>{cust.name}</td>
                                     <td style={{textAlign: "left"}}>{cust.city}</td>
                                     <td style={{textAlign: "left"}}>{cust.address}</td>
