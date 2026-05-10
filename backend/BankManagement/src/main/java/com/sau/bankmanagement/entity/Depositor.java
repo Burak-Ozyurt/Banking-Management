@@ -2,6 +2,8 @@ package com.sau.bankmanagement.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "depositor")
@@ -15,15 +17,18 @@ public class Depositor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Bir müşterinin (Customer) birden fazla Depositor kaydı olabilir
+    // Bir müşterinin birden fazla Depositor kaydı olabilir
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    // Bir hesabın (Account) birden fazla Depositor kaydı olabilir
+    // Bir hesabın birden fazla Depositor kaydı olabilir
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    private String creationDate;
+    // Veritabanına kayıt eklendiğinde o anki tarihi otomatik alır ve sonrasında güncellenmez
+    @CreationTimestamp
+    @Column(name = "creation_date", updatable = false)
+    private LocalDate creationDate;
 }

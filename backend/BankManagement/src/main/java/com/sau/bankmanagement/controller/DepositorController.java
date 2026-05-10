@@ -38,23 +38,22 @@ public class DepositorController {
         return depositorRepository.findAll();
     }
 
-    @GetMapping("/customer/{customerId}")
-    public List<Depositor> getByCustomer(@PathVariable int customerId) {
-        return depositorRepository.findByCustomerId(customerId);
-    }
-
     @PostMapping("/add")
     public Depositor assign(@RequestBody DepositorDTO dto) {
+        // KRİTİK KONTROL: Bu hesap ID'si zaten bir müşteriye atanmış mı?
+        if (depositorRepository.existsByAccountId(dto.getAccountId())) {
+            throw new RuntimeException("Bu hesap zaten başka bir müşteriye tanımlanmış! Bir hesap sadece bir kişiye bağlanabilir.");
+        }
+
         Customer customer = customerRepository.findById(dto.getCustomerId())
-                .orElseThrow(() -> new RuntimeException("İlişkilendirilecek müşteri bulunamadı!"));
+                .orElseThrow(() -> new RuntimeException("Müşteri bulunamadı!"));
 
         Account account = accountRepository.findById(dto.getAccountId())
-                .orElseThrow(() -> new RuntimeException("İlişkilendirilecek hesap bulunamadı!"));
+                .orElseThrow(() -> new RuntimeException("Hesap bulunamadı!"));
 
         Depositor depositor = new Depositor();
         depositor.setCustomer(customer);
         depositor.setAccount(account);
-        depositor.setCreationDate(dto.getCreationDate());
 
         return depositorRepository.save(depositor);
     }
@@ -62,7 +61,7 @@ public class DepositorController {
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable int id) {
         if(!depositorRepository.existsById(id)) {
-            throw new RuntimeException("Silinecek ilişki kaydı bulunamadı!");
+            throw new RuntimeException("Kayıt bulunamadı!");
         }
         depositorRepository.deleteById(id);
     }

@@ -5,15 +5,12 @@ public class DepositorDTO {
     private int customerId;
     private int accountId;
 
-    private String creationDate;
-
     public DepositorDTO() {
     }
 
-    public DepositorDTO(int customerId, int accountId, String creationDate) {
+    public DepositorDTO(int customerId, int accountId) {
         this.customerId = customerId;
         this.accountId = accountId;
-        this.creationDate = creationDate;
     }
 
     // --- Getter ve Setter Metotları ---
@@ -32,13 +29,5 @@ public class DepositorDTO {
 
     public void setAccountId(int accountId) {
         this.accountId = accountId;
-    }
-
-    public String getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
     }
 }

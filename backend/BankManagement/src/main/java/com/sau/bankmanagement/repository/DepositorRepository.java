@@ -7,8 +7,7 @@ import java.util.List;
 
 @Repository
 public interface DepositorRepository extends JpaRepository<Depositor, Integer> {
-
     List<Depositor> findByCustomerId(int customerId);
 
-    List<Depositor> findByAccountId(int accountId);
+    boolean existsByAccountId(int accountId);
 }

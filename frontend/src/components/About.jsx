@@ -16,7 +16,7 @@ const About = () => {
         <div style={{
             minHeight: '80vh',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             justifyContent: 'center',
             backgroundColor: '#f8f9fa', // Açık gri arka plan
             padding: '20px'

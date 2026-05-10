@@ -7,7 +7,7 @@ const Customer = () => {
     const [customers, setCustomers] = useState([]);
     const [modalAdd, setModalAdd] = useState(false);
     const {register, resetField, handleSubmit, formState: {errors}} = useForm();
-    const [customerObj, setCustomerObj] = useState({id: 0, name: '', city: '', address: ''});
+    const [customerObj, setCustomerObj] = useState({id: 0, name: '', city: '', address: '', profileImage: ''});
     const [modalUpdate, setModalUpdate] = useState(false);
     const {handleSubmit: handleUpdate} = useForm();
 
@@ -160,8 +160,22 @@ const Customer = () => {
                                 {/* Resim Yükleme Alanı (Güncelleme Modalı) */}
                                 <Form.Group className="mb-3" controlId="updateImage">
                                     <Form.Label>Profile Image</Form.Label>
+
+                                    {/* MEVCUT FOTOĞRAFI GÖSTERME KISMI EKLENDİ */}
+                                    {customerObj.profileImage && (
+                                        <div className="mb-3">
+                                            <p style={{ fontSize: '12px', color: 'gray', marginBottom: '5px' }}>Current Photo:</p>
+                                            <img
+                                                src={`http://localhost:8080/uploads/${customerObj.profileImage}`}
+                                                alt="Current Profile"
+                                                style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
+                                            />
+                                        </div>
+                                    )}
+
                                     <Form.Control type="file" accept="image/*"
                                                   onChange={(e) => setUpdateImage(e.target.files[0])}/>
+
                                 </Form.Group>
 
                                 <Button variant="primary" type="submit" style={{float: "right"}}>Update</Button>

@@ -19,22 +19,23 @@ const Depositor = () => {
     }, []);
 
     const addDepositor = async (data) => {
-        // Formdan gelen verileri backend'in beklediği DTO formatına uygun gönderiyoruz.
         const depositorDTO = {
             customerId: parseInt(data.customerId),
-            accountId: parseInt(data.accountId),
-            creationDate: data.creationDate
+            accountId: parseInt(data.accountId)
         };
 
         await axios.post("http://localhost:8080/depositor/add", depositorDTO)
             .then(() => {
                 resetField("customerId");
                 resetField("accountId");
-                resetField("creationDate");
                 setModalAdd(false);
                 fetchDepositors("http://localhost:8080/depositor/all");
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                const errorMsg = err.response?.data?.message || "Bu hesap zaten kullanımda veya bir hata oluştu!";
+                alert(errorMsg);
+                console.log(err);
+            });
     }
 
     const onDelete = (cid) => {
@@ -67,12 +68,6 @@ const Depositor = () => {
                                     {errors.accountId && <p style={{color: 'red'}}>Account ID is required</p>}
                                 </Form.Group>
 
-                                <Form.Group className="mb-3" controlId="creationDate">
-                                    <Form.Control type='date'
-                                                  placeholder='Creation Date' {...register("creationDate", {required: true})} />
-                                    {errors.creationDate && <p style={{color: 'red'}}>Creation Date is required</p>}
-                                </Form.Group>
-
                                 <Button variant="primary" type="submit" style={{float: "right"}}>Add</Button>
                             </Form>
                         </Card.Body>
@@ -97,6 +92,7 @@ const Depositor = () => {
                                 <th scope="col">ID</th>
                                 <th scope="col">Customer Name</th>
                                 <th scope="col">Account Number</th>
+                                <th scope="col">Balance</th>
                                 <th scope="col">Creation Date</th>
                                 <th scope="col">Operation</th>
                             </tr>
@@ -107,6 +103,7 @@ const Depositor = () => {
                                     <td>{dep.id}</td>
                                     <td style={{textAlign: "left"}}>{dep.customer?.name}</td>
                                     <td style={{textAlign: "left"}}>{dep.account?.accountNumber}</td>
+                                    <td style={{textAlign: "left"}}>{dep.account?.balance} ₺</td>
                                     <td style={{textAlign: "left"}}>
                                         {dep.creationDate ? new Date(dep.creationDate).toLocaleDateString('tr-TR') : '-'}
                                     </td>
